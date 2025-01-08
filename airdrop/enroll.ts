@@ -1,5 +1,9 @@
 import bs58 from 'bs58';
 import prompt from 'prompt-sync';
+import { Connection, Keypair, PublicKey } from "@solana/web3.js"
+import { Program, Wallet, AnchorProvider } from "@coral-xyz/anchor"
+import { IDL, Turbin3Prereq } from "../programs/Turbin3-prereq";
+import wallet from "./Turbin3-wallet.json"
 
 function base58_to_wallet() {
     console.log("Enter your name:");
@@ -21,3 +25,39 @@ function wallet_to_base58() {
     console.log("{:?}", base58);
 }
 wallet_to_base58();
+
+// We're going to import our keypair from the wallet file
+const keypair = Keypair.fromSecretKey(new Uint8Array(wallet));
+// HvNRQPMWh5f2SfV5nXXFPTsSGu9gtezbdXFBYBKscbGX
+
+// Create a devnet connection
+const connection = new Connection("https://api.devnet.solana.com");
+
+// Github account
+const github = Buffer.from("<https://github.com/icekidtech>", "utf8");
+
+// Create our anchor provider
+const provider = new AnchorProvider(connection, new Wallet(keypair), {commitment: "confirmed"});
+
+// Create our program
+const program : Program<Turbin3Prereq> = new Program(IDL, provider);
+
+// Create the PDA for our enrollment account
+const enrollment_seeds = [Buffer.from("prereq"), keypair.publicKey.toBuffer()];
+const [enrollment_key, _bump] =PublicKey.findProgramAddressSync(enrollment_seeds, program.programId);
+
+// Execute our enrollment transaction
+async () => {
+    try {
+        const txhash = await program.methods.complete(github).accounts({
+            signer: keypair.publicKey,
+        })
+        .signers([
+            keypair,
+        ]).rpc();
+        console.log(`Success! Check out your TX here: https://explorer.solana.com/tx/${txhash}`);
+    } catch (e) {
+        console.error(`Oops, something went wrong! ${e}`);
+    }
+};
+
