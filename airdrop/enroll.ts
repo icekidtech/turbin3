@@ -2,7 +2,7 @@ import bs58 from 'bs58';
 import prompt from 'prompt-sync';
 import { Connection, Keypair, PublicKey } from "@solana/web3.js"
 import { Program, Wallet, AnchorProvider } from "@coral-xyz/anchor"
-import { IDL, Turbin3Prereq } from "../programs/Turbin3-prereq";
+import { IDL, Turbin3Prereq } from "../program/Turbin3-prereq";
 import wallet from "./Turbin3-wallet.json"
 
 function base58_to_wallet() {
