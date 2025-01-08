@@ -29,23 +29,23 @@ const provider = new AnchorProvider(connection, new Wallet(keypair), {commitment
 const program : Program<Turbin3Prereq> = new Program(IDL, provider);
 
 // Creating the PDA for my enrollment account
-const enrollment_seeds = [Buffer.from("prereq"), keypair.publicKey.toBuffer()];
-const [enrollment_key, _bump] = PublicKey.findProgramAddress(enrollment_seeds, program.programId);
+async () => {
+    // Creating the PDA for my enrollment account
+    const enrollment_seeds = [Buffer.from("prereq"), keypair.publicKey.toBuffer()];
+    const [enrollment_key, _bump] = await PublicKey.findProgramAddress(enrollment_seeds, program.programId);
 
-// Executing my enrollment tracsaction
-(async () => {
+    // Executing my enrollment transaction
     try {
-    const txhash = await program.methods
-    .complete(github)
-    .accounts({
-    signer: keypair.publicKey,
-    })
-    .signers([
-    keypair
-    ]).rpc();
-    console.log(`Success! Check out your TX here:
-    https://explorer.solana.com/tx/${txhash}?cluster=devnet`);
+        const txhash = await program.methods
+            .complete(github)
+            .accounts({
+                signer: keypair.publicKey,
+            })
+            .signers([
+                keypair
+            ]).rpc();
+        console.log(`Success! Check out your TX here: https://explorer.solana.com/tx/${txhash}?cluster=devnet`);
     } catch(e) {
-    console.error(`Oops, something went wrong: ${e}`)
+        console.error(`Oops, something went wrong: ${e}`);
     }
-    })();
+};
