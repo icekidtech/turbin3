@@ -1,14 +1,10 @@
 import bs58 from 'bs58';
 import prompt from 'prompt-sync';
-import { Connection, Keypair, PublicKey } from '@solana/web3.js';
-import { Program, Wallet, AnchorProvider } from '@coral-xyz/anchor';
-import { IDL } from './programs/Turbin3-prereq.ts';
-import wallet from "./Turbin3-wallet.json";
 
 function base58_to_wallet() {
     console.log("Enter your name:");
     const promtSync = prompt();
-    const name = promtSync("Enter your name: ");.
+    const name = promtSync("Enter your name: ");
     console.log(`Hello, ${name}!`);
 
     const base58String = "ALX391xQYvL2ShYvAE5eLkCssFrWxLaffaiqiTcVciWS";

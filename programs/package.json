@@ -1,0 +1,13 @@
+{
+    "name": "programs",
+    "type": "module",
+    "version": "1.0.0",
+    "main": "index.ts",
+    "scripts": {
+      "Turbin3Prereq": "./Turbin3-prereq.ts"
+    },
+    "dependencies": {
+      "@solana/web3.js": "^1.98.0",
+      "@coral-xyz/anchor": "^0.24.0"
+    }
+  }

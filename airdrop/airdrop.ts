@@ -1,9 +1,7 @@
-import { Connection, Keypair, LAMPORTS_PER_SOL } from "@solana/web3.js";
+import { Connection, Keypair, LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 import wallet from "./dev-wallet.json";
-import { AnchorProvider } from "@coral-xyz/anchor";
-
-// Creating a new connection to the Solana devnet for SOL tokens
-const connection = new Connection("https://api.devnet.solana.com");
+import { AnchorProvider, Wallet, Program } from "@coral-xyz/anchor";
+import { Turbin3Prereq, IDL } from './programs/Turbin3-prereq';
 
 async () => {
     try {
@@ -35,12 +33,19 @@ const enrollment_seeds = [Buffer.from("prereq"), keypair.publicKey.toBuffer()];
 const [enrollment_key, _bump] = PublicKey.findProgramAddress(enrollment_seeds, program.programId);
 
 // Executing my enrollment tracsaction
-async () => {
-    const tshash = await program.methods.complete(github).accounts({
-        signer: keypair.publicKey,
+(async () => {
+    try {
+    const txhash = await program.methods
+    .complete(github)
+    .accounts({
+    signer: keypair.publicKey,
     })
-    .signers([keypair]).rpc();
-    console.log(`Success! Check out your TX here: https://explorer.solana.com/tx/${txhash}?cluster=devnet`);
-} catch (e) {
-    console.error(`Oops, something went wrong: ${e}`);
-};
+    .signers([
+    keypair
+    ]).rpc();
+    console.log(`Success! Check out your TX here:
+    https://explorer.solana.com/tx/${txhash}?cluster=devnet`);
+    } catch(e) {
+    console.error(`Oops, something went wrong: ${e}`)
+    }
+    })();
